@@ -5,6 +5,8 @@ namespace App\Http\Controllers\V1;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreBlogRequest;
 use App\Http\Requests\UpdateBlogRequest;
+use App\Http\Requests\User\StoreUserRequest;
+use App\Http\Requests\User\UpdateUserRequest;
 use App\Http\Resources\Blogs\BlogResource;
 use App\Http\Resources\Users\UserResource;
 use App\Services\UserService;
@@ -24,11 +26,11 @@ class UserController extends Controller
     public function index(Request $request)
     {
         return UserResource::collection(
-                $this->service->paginate($request)
-            );
+            $this->service->paginate($request)
+        );
     }
 
-    public function store(StoreBlogRequest $request)
+    public function store(StoreUserRequest $request)
     {
         return Response::storeSuccess(
             UserResource::make(
@@ -44,16 +46,16 @@ class UserController extends Controller
         );
     }
 
-    public function update(UpdateBlogRequest $request, $id)
+    public function update(UpdateUserRequest $request, $id)
     {
         $this->service->update($id, $request);
         return Response::updateSuccess();
     }
 
-    public function destroy($blogId)
+    public function destroy($userId)
     {
-        DB::transaction(function () use ($blogId) {
-            $this->service->delete($blogId);
+        DB::transaction(function () use ($userId) {
+            $this->service->delete($userId);
         });
     }
 }
